@@ -1,8 +1,8 @@
 # nnoq
-Not [noq](https://github.com/tsoding/Noq). or [eqthy](https://github.com/catseye/Eqthy).
+Not [noq](https://github.com/tsoding/Noq). Also not [eqthy](https://github.com/catseye/Eqthy).
 
-this aims to be a very simple theorem prover (_nay, verifier_) based on expression transformations to educate myself and others about the basics of theorem provers.
+This aims to be a very simple theorem prover (_nay, verifier_) based on expression transformations to educate myself and others about the basics of theorem provers.
 
-it also has types to enssure the expression are not nonsensical.
+It also has types to ensure the expression are not nonsensical.
 
-examples are on the examples directory.
+Examples are on the examples directory.
