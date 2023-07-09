@@ -1,0 +1,17 @@
+type S :: C
+type K :: C
+type I :: C
+type App :: (C, C) :: C
+
+axiom s_app :: [App(App(App(S, a), b), c)] := App(App(a, c), App(b, c))
+axiom k_app :: [App(App(K, a), b)] := a 
+axiom i_app :: [App(I, x)] := x
+axiom s_app_conv :: [App(App(a, c), App(b, c))] := App(App(App(S, a), b), c)
+axiom k_app_conv :: [a] (b) := App(App(K, a), b)
+axiom i_app_conv :: [x] := App(I, x)
+
+theorem skk_is_i :: [App(App(App(S, K), K), x)] := App(I, x) {
+    s_app
+    k_app
+    i_app_conv
+}
