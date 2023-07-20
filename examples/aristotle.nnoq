@@ -2,11 +2,11 @@ type Man :: (Thing) :: Bool
 type Mortal :: (Thing) :: Bool
 type Aristotle :: Thing
 
-axiom men_are_mortal [Man(x)] := Mortal(x)
+axiom men_are_mortal :: [Man(x)] := Mortal(x)
 
-axiom aristotle_is_man [x] := Man(Aristotle) 
+axiom aristotle_is_man :: [x] := Man(Aristotle) 
 
-theorem aristotle_is_mortal [x] := Mortal(Aristotle) {
+theorem aristotle_is_mortal :: [x] := Mortal(Aristotle) {
     aristotle_is_man
     men_are_mortal
 }
