@@ -1,0 +1,24 @@
+type Impl :: (Prop, Prop) :: Prop
+type Not :: (Prop) :: Prop
+
+type Theorem :: (Prop, Theorem)  :: Theorem
+type Nil :: Theorem
+
+axiom theorem_comm :: [Theorem(p, Theorem(q, r))] := Theorem(q, Theorem(p, r))
+axiom theorem_rem :: [Theorem(p, q)] := q
+axiom modus_ponens :: [Theorem(p, Theorem(Impl(p, q), r))] := Theorem(q, Theorem(p, Theorem(Impl(p, q), r)))
+axiom a1 :: [th] (p, q) := Theorem(Impl(p, Impl(q, p)), th)
+axiom a2 :: [th] (p, q, r) := Theorem(Impl(Impl(p, Impl(q, r)), Impl(Impl(p, q), Impl(p, r))), th)
+axiom a3 :: [th] (p, q) := Theorem(Impl(Impl(Not(p), Not(q)), Impl(q, p)), th)
+
+theorem p_implies_p :: [Theorem(x, y)] (p) := Theorem(Impl(p, p), Theorem(x, y)) {
+    a2(p, Impl(x, p), p)
+    a1(p, Impl(x, p))
+    modus_ponens
+    theorem_rem[1]
+    theorem_rem[1]
+    a1(p, x)
+    modus_ponens
+    theorem_rem[1]
+    theorem_rem[1]
+}
