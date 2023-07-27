@@ -1,3 +1,6 @@
+use core::fmt;
+use std::fmt::Display;
+
 use crate::error::{Error, ErrorTy, Loc};
 
 pub struct Scanner<'a> {
@@ -38,6 +41,36 @@ pub enum TokenTy {
     Eof,
 }
 
+impl Display for TokenTy {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        use TokenTy::*;
+
+        let name = match self {
+            Ident(s) => format!("identifier `{}`", s),
+            Number(n) => format!("number `{}`", n),
+            x => match x {
+                Theorem => "keyword `theorem`",
+                Type => "keyword `type`",
+                Axiom => "keyword `axiom`",
+                Colon => "token `:`",
+                ColonEqual => "token `:=`",
+                DoubleColon => "token `::`",
+                Comma => "token `,`",
+                Lbrace => "token `[`",
+                Rbrace => "token `]`",
+                Lparen => "token `(`",
+                Rparen => "token `)`",
+                Lcurly => "token `{`",
+                Rcurly => "token `}`",
+                Eof => "EOF",
+                _ => unreachable!(),
+            }
+            .to_string(),
+        };
+        write!(f, "{}", name)
+    }
+}
+
 impl<'a> Scanner<'a> {
     pub fn new(s: &'a str) -> Self {
         Self {
@@ -55,7 +88,7 @@ impl<'a> Scanner<'a> {
             Err(Error {
                 loc: res.loc,
                 ty: ErrorTy::SyntaxError,
-                desc: format!("expected idenifier, found token {:?}", res.ty),
+                desc: format!("expected idenifier, found {}", res.ty),
             })
         }
     }
@@ -68,7 +101,7 @@ impl<'a> Scanner<'a> {
             Err(Error {
                 loc: self.loc,
                 ty: ErrorTy::SyntaxError,
-                desc: format!("expected number, found token {:?}", res.ty),
+                desc: format!("expected number, found {}", res.ty),
             })
         }
     }
@@ -79,7 +112,7 @@ impl<'a> Scanner<'a> {
             Err(Error {
                 loc: res.loc,
                 ty: ErrorTy::SyntaxError,
-                desc: format!("expected one of {:?}, found token {:?}", t, res.ty),
+                desc: format!("expected one of {}, found {}", list_of_token(t), res.ty),
             })
         } else {
             Ok(res)
@@ -92,7 +125,7 @@ impl<'a> Scanner<'a> {
             Err(Error {
                 loc: res.loc,
                 ty: ErrorTy::SyntaxError,
-                desc: format!("expected token {:?}, found token {:?}", token, res.ty),
+                desc: format!("expected {}, found {}", token, res.ty),
             })
         } else {
             Ok(res)
@@ -258,4 +291,14 @@ impl<'a> Scanner<'a> {
 
 fn is_break(c: char) -> bool {
     !c.is_uppercase() && !c.is_lowercase() && !c.is_digit(10) && c != '_'
+}
+
+fn list_of_token(l: &[TokenTy]) -> String {
+    l[..l.len() - 1]
+        .iter()
+        .map(ToString::to_string)
+        .reduce(|a, b| a + ", " + &b)
+        .unwrap()
+        + " or "
+        + &l.last().unwrap().to_string()
 }
