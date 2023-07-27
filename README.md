@@ -11,7 +11,7 @@ Examples are on the examples directory.
 The heart of nnoq is a single operator, :=, which is governed by the following axioms:
 1. $A := A$
 2. $((A := B) \wedge (B := C)) \Rightarrow (A := C)$
-3. $((A := B) \wedge (A: T)) \Rightarrow (B: T)$, where $A: T$ informally means "$A$ is of type $T$"
+3. $((A := B) \wedge (A: T)) \Rightarrow (B: T)$, where $A: T$ informally means that $A$ is of type $T$.
 4. $((A := B) \wedge (A: T)) \Rightarrow (f(A, \overline{a}) := f(B, \overline{a}))$, where $\overline{a}$ is the rest of the arguments of $f$.
 
 that is, := is reflexive, transitive, and congruent. in fact it is basically typed equational logic without the symmetry and substitution axioms.
