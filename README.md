@@ -8,10 +8,11 @@ It also has types to ensure the expressions are not nonsensical.
 Examples are on the examples directory.
 
 # Foundations
-I guess I should explain what the terms actually mean first:
+I guess I should define the terms first:
+- small letters denote variable name, capital letters denote terms (except $T$, which denotes a type name).
 - $A: T$ means that $A$ is of type $T$.
-- $\Gamma$ denotes a set $x_0 := y_0, x_1 := y_1, \ldots, x_n := y_n$ of axioms (defined using the `axiom` keyword).
-- $\Pi$ denotes a set $x_1:A_1, x_2:A_2, \ldots, x_n: A_n$  of type assignments (defined using the `type` keyword).
+- $\Gamma$ denotes a set $X_0 := Y_0, X_1 := Y_1, \ldots, X_n := Y_n$ of axioms (defined using the `axiom` keyword).
+- $\Pi$ denotes a set $X_1: T_1, X_2: T_2, \ldots, X_n: T_n$  of type assignments (defined using the `type` keyword).
 - in $A[x/Y]$, $x/Y$ denotes a pattern/replacement pair, where $x$ is a variable, while $B$ is a term.      
 - the substitution algorithm $A[x/Y]$ is defined as follows (taking $V$ to be the set of all variable names):
     1. ${\displaystyle {a[a/B] = B}}$.
