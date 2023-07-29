@@ -17,7 +17,6 @@ I guess I should define the terms first:
     1. if $x \in V$ then $x$ is a term.
     2. if $f \in F$ then:
          - $f$ is a term.
-         - if $A$ is a term then so is $f(A)$.
          - if $A$ and $B$ are terms then so is $f(A, B)$.
 
 - $A: T$ means that $A$ is of type $T$.
@@ -25,11 +24,10 @@ I guess I should define the terms first:
 - $\Pi$ denotes a set $X_1: T_1, X_2: T_2, \ldots, X_n: T_n$  of type assignments (defined using the `type` keyword).
 - in $A[x/Y]$, $x/Y$ denotes a pattern/replacement pair, where $x$ is a variable, while $Y$ is a term.      
 - the substitution algorithm $A[x/Y]$ is defined as follows:
-    1. ${\displaystyle {a[x/Y] = Y}}$.
+    1. ${\displaystyle {x[x/Y] = Y}}$.
     2. ${\displaystyle {a[x/Y] = a}}, a \in V - \set{x}$.
     3. ${\displaystyle {f[x/Y] = f}}$.
-    4. ${\displaystyle {f(A)[x/Y] = f(A[x/Y])}}$.
-    5. ${\displaystyle {f(A, B)[x/Y] = f(A[x/Y], B[x/Y])}}$.
+    4. ${\displaystyle {f(A, B)[x/Y] = f(A[x/Y], B[x/Y])}}$.
  
 
 The heart of nnoq is a single operator, `:=`, which is governed by the following axioms:  
