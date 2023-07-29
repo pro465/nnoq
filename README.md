@@ -9,15 +9,27 @@ Examples are on the examples directory.
 
 # Foundations
 I guess I should define the terms first:
-- small letters denote variable name, capital letters denote terms (except $T$, which denotes a type name).
+- small letters denote variable name, capital letters denote terms (exceptions below).
+- $T$ denotes a type name.
+- $V$ denotes the set of all variable names.
+- $F$ denotes the set of all function/constant names.
+- term definition:
+    1. if $x \in V$ then $x$ is a term.
+    2. if $f \in F$ then:
+         - $f$ is a term.
+         - if $A$ is a term then so is $f(A)$.
+         - if $A$ and $B$ are terms then so is $f(A, B)$.
+
 - $A: T$ means that $A$ is of type $T$.
 - $\Gamma$ denotes a set $X_0 := Y_0, X_1 := Y_1, \ldots, X_n := Y_n$ of axioms (defined using the `axiom` keyword).
 - $\Pi$ denotes a set $X_1: T_1, X_2: T_2, \ldots, X_n: T_n$  of type assignments (defined using the `type` keyword).
-- in $A[x/Y]$, $x/Y$ denotes a pattern/replacement pair, where $x$ is a variable, while $B$ is a term.      
-- the substitution algorithm $A[x/Y]$ is defined as follows (taking $V$ to be the set of all variable names):
-    1. ${\displaystyle {a[a/B] = B}}$.
-    2. ${\displaystyle {b[a/B] = b}}, b \in V - \set{a}$.
-    3. ${\displaystyle {f(A_0, A_1, \ldots, A_n)[x/Y] = f(A_0[x/Y], A_1[x/Y], \ldots, A_n[x/Y])}}$.
+- in $A[x/Y]$, $x/Y$ denotes a pattern/replacement pair, where $x$ is a variable, while $Y$ is a term.      
+- the substitution algorithm $A[x/Y]$ is defined as follows:
+    1. ${\displaystyle {a[x/Y] = Y}}$.
+    2. ${\displaystyle {a[x/Y] = a}}, a \in V - \set{x}$.
+    3. ${\displaystyle {f[x/Y] = f}}$.
+    4. ${\displaystyle {f(A)[x/Y] = f(A[x/Y])}}$.
+    5. ${\displaystyle {f(A, B)[x/Y] = f(A[x/Y], B[x/Y])}}$.
  
 
 The heart of nnoq is a single operator, `:=`, which is governed by the following axioms:  
