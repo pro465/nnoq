@@ -14,10 +14,11 @@ I guess I should define the terms first:
 - $\mathbf{V}$ denotes the set of all variable names.
 - $\mathbf{F}$ denotes the set of all function names.
 - $\mathbf{K}$ denotes the set of all constants.
-- $\mathbb{T}$ is the set of all terms, ${\displaystyle{\mathbb{T} = \mathbf{V} | \mathbf{K} | \mathbf{F}(\mathbb{T}, \mathbb{T})}}$    
+- term definition:
+    1. if  $x \in \mathbf{V} \cup \mathbf{K}$ then $x$ is a term.
+    2. if $f \in \mathbf{F}$, and $A$ and $B$ are terms, then so is $f(A, B)$.    
 - the functions have type signature $(T_1, T_2) \mapsto T_3$.
 - $\mathbf{T}$ denotes any type i.e., type names as well as function types.  
-
 - $A: \mathbf{T}$ means that $A$ is of type $\mathbf{T}$.
 - $\Gamma$ denotes a set $X_0 := Y_0, X_1 := Y_1, \ldots, X_n := Y_n$ of axioms (defined using the `axiom` keyword).
 - $\Pi$ denotes a set $X_1: \mathbf{T}_1, X_2: \mathbf{T}_2, \ldots, X_n: \mathbf{T}_n$  of type assignments (defined using the `type` keyword).
@@ -37,7 +38,7 @@ The heart of nnoq is a single operator, `:=`, which is governed by the following
     5. ${\displaystyle {\Gamma \vdash A := B \qquad \qquad \Pi \vdash f(C, A): T \over \Gamma \vdash f(C, A) := f(C, B)}}$ (congruence2)    
     6. ${\displaystyle {\Gamma \vdash A := B \qquad \qquad \Pi \vdash A: T_A \qquad \qquad \Pi \vdash A[x/Y]: T_A \over \Gamma \vdash A[x/Y] := B[x/Y]}}$ (substitution)   
  
-the following four axioms are for the type analysis (inference and checking):  
+the following five axioms are for the type analysis (inference and checking):  
     7. ${\displaystyle {{} \over \Pi, A : \mathbf{T}, \Pi ' \vdash A : \mathbf{T}}}$ (derivability from type assignments/declarations)  
     8. ${\displaystyle {\Gamma \vdash A := B \qquad \qquad \Pi \vdash A: T \over \Pi \vdash B : T}}$    
     9. ${\displaystyle {\Gamma \vdash A := B \qquad \qquad \Pi \vdash B: T \over \Pi \vdash A : T}}$    
