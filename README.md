@@ -34,8 +34,8 @@ The heart of nnoq is a single operator, `:=`, which is governed by the following
     2. ${\displaystyle {{} \over \Gamma, A := B, \Gamma ' \vdash A := B}}$ (derivability from axioms)  
     3. ${\displaystyle {\Gamma \vdash A := B \qquad \qquad \Gamma \vdash B := C \over \Gamma \vdash A := C}}$ (transitivity)  
     4. ${\displaystyle {\Gamma \vdash A := B \qquad \qquad \Pi \vdash A: T_A \qquad \qquad \Pi \vdash x: T_x \qquad \qquad \Pi, A[x/Y]: T_A \vdash Y: T_x \over \Gamma \vdash A[x/Y] := B[x/Y]}}$ (substitution)   
-    5. ${\displaystyle {\Gamma \vdash A := B \qquad \Pi \vdash f: (T_1, T_2) \mapsto T_3 \qquad \Pi \vdash A: T_1 \qquad \Pi \vdash C: T_2 \over \Gamma \vdash f(A, C) := f(B, C)}}$ (congruence1)    
-    6. ${\displaystyle {\Gamma \vdash A := B \qquad \Pi \vdash f: (T_1, T_2) \mapsto T_3 \qquad \Pi \vdash A: T_2 \qquad \Pi \vdash C: T_1 \over \Gamma \vdash f(C, A) := f(C, B)}}$ (congruence2)    
+    5. ${\displaystyle {\Gamma \vdash A := B \qquad \qquad \Pi \vdash f: (T_1, T_2) \mapsto T_3 \qquad \qquad \Pi \vdash A: T_1 \qquad \qquad \Pi \vdash C: T_2 \over \Gamma \vdash f(A, C) := f(B, C)}}$ (congruence1)    
+    6. ${\displaystyle {\Gamma \vdash A := B \qquad \qquad \Pi \vdash f: (T_1, T_2) \mapsto T_3 \qquad \qquad \Pi \vdash A: T_2 \qquad \qquad \Pi \vdash C: T_1 \over \Gamma \vdash f(C, A) := f(C, B)}}$ (congruence2)    
  
 the following four axioms are for the type analysis (inference and checking):  
     7. ${\displaystyle {{} \over \Pi, A : \mathbf{T}, \Pi ' \vdash A : \mathbf{T}}}$ (derivability from type assignments/declarations)  
