@@ -44,4 +44,4 @@ the following three axioms are for the type analysis (inference and checking):
     8. ${\displaystyle {\Gamma \vdash A := B \qquad \qquad \Pi \vdash A: T \over \Pi \vdash B : T}}$    
     9. ${\displaystyle {\Pi \vdash f: (T_1, T_2) \mapsto T_3 \qquad \qquad \Pi \vdash A: T_1 \qquad \qquad \Pi \vdash B: T_2 \over \Pi \vdash f(A, B): T_3}}$  
 
-nnoq builds on top of this foundation by generalizing the functions to arbitrary arity. however, this does not increase its power, as an n-arity function $f: (T_1, \ldots, T_n) \mapsto T_{ret}$ can be easily emulated in the core by n functions $f_1: (T_1, F_0) \mapsto F_1, f_2: (T_2, F_1) \mapsto F_2, \ldots, f_n: (T_n, F_{n-1}) \mapsto T_{ret}$ and a constant $f_0: F_0$.
+nnoq builds on top of this foundation by generalizing the functions to arbitrary arity. however, this does not increase its power, as an n-arity function $f: (T_1, \ldots, T_n) \mapsto T_{ret}$ can be easily emulated in the core by n functions $f_1: (T_{n}, F_0) \mapsto F_1, f_2: (T_{n-1}, F_1) \mapsto F_2, \ldots, f_n: (T_1, F_{n-1}) \mapsto T_{ret}$ and a constant $f_0: F_0$.
