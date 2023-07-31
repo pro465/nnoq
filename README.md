@@ -31,7 +31,7 @@ I guess I should define the terms first:
  
 
 The heart of nnoq is a single operator, `:=`, which is governed by the following axioms:  
-    1. ${\displaystyle {{} \over \Gamma \vdash A := A}}$ (reflexivity)   
+    1. ${\displaystyle {\Pi \vdash A: T \over \Gamma \vdash A := A}}$ (reflexivity)   
     2. ${\displaystyle {{} \over \Gamma, A := B, \Gamma ' \vdash A := B}}$ (derivability from axioms)  
     3. ${\displaystyle {\Gamma \vdash A := B \qquad \qquad \Gamma \vdash B := C \over \Gamma \vdash A := C}}$ (transitivity)  
     4. ${\displaystyle {\Gamma \vdash A := B \qquad \qquad \Gamma \vdash C := D \qquad \qquad \Pi \vdash f(A, C): T \over \Gamma \vdash f(A, C) := f(B, D)}}$ (congruence)    
