@@ -41,6 +41,6 @@ the following five axioms are for the type analysis (inference and checking):
     6. ${\displaystyle {{} \over \Pi, A : \mathbf{T}, \Pi ' \vdash A : \mathbf{T}}}$ (derivability from type assignments/declarations)  
     7. ${\displaystyle {(A := b) \in \Gamma \qquad \qquad \Pi \vdash A: T \over \Pi \vdash b : T}}$ (type inference from `:=` #1)    
     8. ${\displaystyle {(a := B) \in \Gamma \qquad \qquad \Pi \vdash B: T \over \Pi \vdash a : T}}$ (type inference from `:=` #2)    
-    9. ${\displaystyle {\Pi \vdash f: (T_1, T_2) \mapsto T_3 \qquad \qquad x, y \in \mathbf{V} \over \Pi, x: T_1, y: T_2 \vdash f(x, y): T_3}}$ (typed variable introduction)    
-    10. ${\displaystyle {\Pi, x: T_x \vdash A: T_A \qquad \qquad \Pi, A[x/Y]: T_A \vdash Y: T_x \over \Pi \vdash A[x/Y] : T_A}}$ (typed variable elimination)    
+    9. ${\displaystyle {\Pi, x: T_x \vdash A: T_A \qquad \qquad \Pi, A[x/Y]: T_A \vdash Y: T_x \over \Pi \vdash A[x/Y] : T_A}}$ (typed variable elimination)    
+    10. ${\displaystyle {\Pi \vdash f: (T_1, T_2) \mapsto T_3 \qquad \qquad x \neq y \qquad \qquad x: T_x, y: T_y \notin \Pi \over \Pi, x: T_1, y: T_2 \vdash f(x, y): T_3}}$ (typed variable introduction)    
 nnoq builds on top of this foundation by generalizing the functions to arbitrary arity. however, this does not increase its power, as an n-arity function $f: (T_1, \ldots, T_n) \mapsto T_{ret}$ can be easily emulated in the core by n functions $f_1: (T_{n}, F_0) \mapsto F_1, f_2: (T_{n-1}, F_1) \mapsto F_2, \ldots, f_n: (T_1, F_{n-1}) \mapsto T_{ret}$ and a constant $f_0: F_0$.
