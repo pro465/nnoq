@@ -32,15 +32,15 @@ I guess I should define the terms first:
 
 The heart of nnoq is a single operator, `:=`, which is governed by the following axioms:  
     1. ${\displaystyle {\Pi \vdash A: T \over \Gamma \vdash A := A}}$ (reflexivity)   
-    2. ${\displaystyle {{} \over \Gamma, A := B, \Gamma ' \vdash A := B}}$ (derivability from axioms)  
+    2. ${\displaystyle {\Pi \vdash A: T \qquad \qquad \Pi \vdash B: T \over \Gamma, A := B, \Gamma ' \vdash A := B}}$ (derivability from axioms)  
     3. ${\displaystyle {\Gamma \vdash A := B \qquad \qquad \Gamma \vdash B := C \over \Gamma \vdash A := C}}$ (transitivity)  
     4. ${\displaystyle {\Gamma \vdash A := B \qquad \qquad \Gamma \vdash C := D \qquad \qquad \Pi \vdash f(A, C): T \over \Gamma \vdash f(A, C) := f(B, D)}}$ (congruence)    
     5. ${\displaystyle {\Gamma \vdash A := B \qquad \qquad \Pi \vdash A: T_A \qquad \qquad \Pi \vdash A[x/Y]: T_A \over \Gamma \vdash A[x/Y] := B[x/Y]}}$ (substitution)   
  
 the following five axioms are for the type analysis (inference and checking):  
     6. ${\displaystyle {{} \over \Pi, A : \mathbf{T}, \Pi ' \vdash A : \mathbf{T}}}$ (derivability from type assignments/declarations)  
-    7. ${\displaystyle {\Gamma \vdash A := B \qquad \qquad \Pi \vdash A: T \over \Pi \vdash B : T}}$ (type inference from `:=` #1)    
-    8. ${\displaystyle {\Gamma \vdash A := B \qquad \qquad \Pi \vdash B: T \over \Pi \vdash A : T}}$ (type inference from `:=` #2)    
+    7. ${\displaystyle {(A := b) \in \Gamma \qquad \qquad \Pi \vdash A: T \over \Pi \vdash b : T}}$ (type inference from `:=` #1)    
+    8. ${\displaystyle {(a := B) \in \Gamma \qquad \qquad \Pi \vdash B: T \over \Pi \vdash a : T}}$ (type inference from `:=` #2)    
     9. ${\displaystyle {\Pi \vdash f: (T_1, T_2) \mapsto T_3 \qquad \qquad x, y \in \mathbf{V} \over \Pi, x: T_1, y: T_2 \vdash f(x, y): T_3}}$ (typed variable introduction)    
     10. ${\displaystyle {\Pi, x: T_x \vdash A: T_A \qquad \qquad \Pi, A[x/Y]: T_A \vdash Y: T_x \over \Pi \vdash A[x/Y] : T_A}}$ (typed variable elimination)    
 nnoq builds on top of this foundation by generalizing the functions to arbitrary arity. however, this does not increase its power, as an n-arity function $f: (T_1, \ldots, T_n) \mapsto T_{ret}$ can be easily emulated in the core by n functions $f_1: (T_{n}, F_0) \mapsto F_1, f_2: (T_{n-1}, F_1) \mapsto F_2, \ldots, f_n: (T_1, F_{n-1}) \mapsto T_{ret}$ and a constant $f_0: F_0$.
