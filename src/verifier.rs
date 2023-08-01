@@ -304,10 +304,10 @@ impl Verifier {
         for call in a.proof.clone().unwrap() {
             let rule_ty = &self.ty[&call.f];
             let rule = &self.rules[&call.f];
-            let res = index(&mut res, &call.idxs)?;
+            let res2 = index(&mut res, &call.idxs)?;
             self.typecheck_expr(
                 &mut ty,
-                res,
+                res2,
                 a.loc,
                 Some(ParamTy {
                     name: rule_ty.ret.clone(),
@@ -315,19 +315,31 @@ impl Verifier {
                 }),
             )?;
             let mut vars = HashMap::new();
-            match_(&mut vars, &rule.pat, res)?;
+            match_(&mut vars, &rule.pat, res2)?;
             for (v, e) in rule.params.iter().zip(call.args.iter()) {
                 vars.insert(v.clone(), e.clone());
             }
-            *res = rule.rep.clone();
-            replace(&vars, res);
+            *res2 = rule.rep.clone();
+            replace(&vars, res2);
+            if let Some(ret) = call.ret {
+                if !is_eq(&res, &ret) {
+                    return Err(Error {
+                        loc: call.loc,
+                        ty: ErrorTy::VerifError,
+                        desc: format!("expected expression `{}`, found expression `{}`", ret, res),
+                    });
+                }
+            }
         }
 
         if !is_eq(&res, &a.rep) {
-            return Err(Error { 
-                loc: a.loc, 
-                ty: ErrorTy::VerifError, 
-                desc: format!("theorem's replacement expression is {} while the resulting expression obtained from proof is {}", a.rep, res)
+            return Err(Error {
+                loc: a.loc,
+                ty: ErrorTy::VerifError,
+                desc: format!(
+                    "expected expression `{}`, found expression `{}`",
+                    a.rep, res
+                ),
             });
         }
         Ok(())
