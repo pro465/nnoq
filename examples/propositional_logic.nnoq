@@ -100,3 +100,11 @@ theorem double_neg_1 :: [th] (p) := Theorem(Impl(Not(Not(p)), p), th) {
     theorem_rem[1]
     theorem_rem[1]
 }
+
+theorem double_neg_2 :: [th] := Theorem(Impl(p, Not(Not(p)))) {
+    a3(Not(Not(p)), p)
+    double_neg_1(Not(p))
+    modus_ponens
+    theorem_rem[1]
+    theorem_rem[1]
+}
