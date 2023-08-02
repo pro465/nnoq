@@ -59,7 +59,7 @@ theorem socks_and_shoes :: [Inv(Mul(a, b))] := Mul(Inv(b), Inv(a)) {
     idleft_conv
     invleft_conv[0] (b)
     idleft_conv[0, 1]
-    invleft_conv[0, 1, 0] (a) :: [Mul(Mul(Inv(b), Mul(Mul(Inv(a), a), b)), Inv(Mul(a, b)))]
+    invleft_conv[0, 1, 0] (a)      [:= Mul(Mul(Inv(b), Mul(Mul(Inv(a), a), b)), Inv(Mul(a, b)))]
     assoc[0, 1]
     assoc_conv[0]
     assoc
@@ -72,7 +72,7 @@ theorem socks_and_shoes_conv :: [Mul(Inv(b), Inv(a))] := Inv(Mul(a, b)) {
     invright_conv[1] (Mul(a, b))
     assoc_conv
     assoc[0]
-    assoc_conv[0, 1] :: [Mul(Mul(Inv(b), Mul(Mul(Inv(a), a), b)), Inv(Mul(a, b)))]
+    assoc_conv[0, 1]               [:= Mul(Mul(Inv(b), Mul(Mul(Inv(a), a), b)), Inv(Mul(a, b)))]
     invleft[0, 1, 0]
     idleft[0, 1]
     invleft[0]

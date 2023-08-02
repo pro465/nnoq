@@ -228,8 +228,8 @@ impl<'a> Parser<'a> {
             }
         }
 
-        let ret = if self.sc.is_token(TokenTy::DoubleColon)? {
-            self.sc.expect_token(TokenTy::Lbrace)?;
+        let ret = if self.sc.is_token(TokenTy::Lbrace)? {
+            self.sc.expect_token(TokenTy::ColonEqual)?;
             let e = self.parse_expr()?;
             self.sc.expect_token(TokenTy::Rbrace)?;
             Some(e)

@@ -97,19 +97,8 @@ impl Verifier {
             });
         }
 
-        let mut rep_names = HashSet::new();
-        insert_vars(&mut rep_names, &a.rep);
-        let union = &param_names | &pat_names;
-        if !rep_names.is_subset(&union) {
-            return Err(Error {
-                loc: a.loc,
-                ty: ErrorTy::VerifError,
-                desc: format!(
-                    "undeclared variable(s): {}",
-                    vars_to_string(rep_names.difference(&union).cloned().collect())
-                ),
-            });
-        }
+        let declared_vars = &param_names | &pat_names;
+        let rep_names = self.check_closed_expr(&a.rep, &declared_vars, a.loc)?;
 
         if !param_names.is_subset(&rep_names) {
             return Err(Error {
@@ -132,22 +121,36 @@ impl Verifier {
                     });
                 }
                 for arg in &call.args {
-                    let mut free_vars = HashSet::new();
-                    insert_vars(&mut free_vars, arg);
-                    if !free_vars.is_subset(&union) {
-                        return Err(Error {
-                            loc: call.loc,
-                            ty: ErrorTy::VerifError,
-                            desc: format!(
-                                "undeclared variable(s): {}",
-                                vars_to_string(free_vars.difference(&union).cloned().collect())
-                            ),
-                        });
-                    }
+                    self.check_closed_expr(arg, &declared_vars, call.loc)?;
+                }
+                if let Some(e) = &call.ret {
+                    self.check_closed_expr(e, &declared_vars, call.loc)?;
                 }
             }
         }
         Ok(())
+    }
+
+    fn check_closed_expr(
+        &self,
+        e: &Expr,
+        declared_vars: &HashSet<String>,
+        loc: Loc,
+    ) -> Result<HashSet<String>, Error> {
+        let mut free_vars = HashSet::new();
+        insert_vars(&mut free_vars, e);
+        if !free_vars.is_subset(declared_vars) {
+            Err(Error {
+                loc,
+                ty: ErrorTy::VerifError,
+                desc: format!(
+                    "undeclared variable(s): {}",
+                    vars_to_string(free_vars.difference(&declared_vars).cloned().collect())
+                ),
+            })
+        } else {
+            Ok(free_vars)
+        }
     }
 
     fn typecheck(&self, a: &Rule) -> Result<(HashMap<String, ParamTy>, String), Error> {
@@ -206,7 +209,12 @@ impl Verifier {
                 }
 
                 for (ty, arg) in call_typedef.param.iter().zip(call.args.iter()) {
-                    self.typecheck_expr(&mut map, arg, a.loc, Some(ty.clone()))?;
+                    // note: loc param does not matter here
+                    self.typecheck_expr(&mut map, arg, call_typedef.loc, Some(ty.clone()))?;
+                }
+
+                if let Some(e) = &call.ret {
+                    self.typecheck_expr(&mut map, e, call.loc, Some(ty.clone()))?;
                 }
             }
         }
@@ -315,12 +323,13 @@ impl Verifier {
                 }),
             )?;
             let mut vars = HashMap::new();
-            match_(&mut vars, &rule.pat, res2)?;
+            match_(&mut vars, &rule.pat, res2, call.loc)?;
             for (v, e) in rule.params.iter().zip(call.args.iter()) {
                 vars.insert(v.clone(), e.clone());
             }
             *res2 = rule.rep.clone();
             replace(&vars, res2);
+
             if let Some(ret) = call.ret {
                 if !is_eq(&res, &ret) {
                     return Err(Error {
@@ -355,13 +364,13 @@ fn insert_vars(m: &mut HashSet<String>, a: &Expr) {
     }
 }
 
-fn match_(m: &mut HashMap<String, Expr>, pat: &Expr, e: &Expr) -> Result<(), Error> {
+fn match_(m: &mut HashMap<String, Expr>, pat: &Expr, e: &Expr, loc: Loc) -> Result<(), Error> {
     match (pat, e) {
-        (Expr::Var { name, loc, .. }, _) => {
+        (Expr::Var { name, .. }, _) => {
             if let Some(v) = m.get(name) {
                 if !is_eq(v, e) {
                     return Err(Error {
-                        loc: loc.clone(),
+                        loc,
                         ty: ErrorTy::VerifError,
                         desc: format!("bindings not equal: {} != {}", v, e),
                     });
@@ -379,13 +388,13 @@ fn match_(m: &mut HashMap<String, Expr>, pat: &Expr, e: &Expr) -> Result<(), Err
             },
         ) if x == y && pb.len() == eb.len() => {
             for (p, e) in pb.iter().zip(eb.iter()) {
-                match_(m, p, e)?;
+                match_(m, p, e, loc)?;
             }
         }
 
-        (Expr::Func { loc, .. }, ..) => {
+        (Expr::Func { .. }, ..) => {
             return Err(Error {
-                loc: loc.clone(),
+                loc,
                 ty: ErrorTy::VerifError,
                 desc: format!("cannot match pattern {} with expression {}", pat, e),
             })
