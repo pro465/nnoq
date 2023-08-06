@@ -1,0 +1,90 @@
+type T :: B
+type F :: B
+
+type Or :: (B, B) :: B
+type And :: (B, B) :: B
+type Not :: (B) :: B
+
+axiom id1 :: [Or(x, F) := x]
+axiom id2 :: [And(x, T) := x]
+
+# these two are their own converses, so we need only 16 - 2 = 14 axioms
+axiom comm1 :: [Or(x, y) := Or(y, x)]
+axiom comm2 :: [And(x, y) := And(y, x)]
+
+axiom dist1 :: [Or(x, And(y, z)) := And(Or(x, y), Or(x, z))]
+axiom dist2 :: [And(x, Or(y, z)) := Or(And(x, y), And(x, z))]
+
+axiom cmpl1 :: [Or(x, Not(x)) := T]
+axiom cmpl2 :: [And(x, Not(x)) := F]
+# converses
+axiom id1c :: [x := Or(x, F)]
+axiom id2c :: [x := And(x, T)]
+
+axiom dist1c :: [And(Or(x, y), Or(x, z)) := Or(x, And(y, z))]
+axiom dist2c :: [Or(And(x, y), And(x, z)) := And(x, Or(y, z))]
+
+axiom cmpl1c :: (x) :: [T := Or(x, Not(x))]
+axiom cmpl2c :: (x) :: [F := And(x, Not(x))]
+
+theorem idm1 :: [Or(x, x) := x] {
+    id2c
+    cmpl1c[1](x)
+    dist1c
+    cmpl2[1]
+    id1
+}
+
+theorem idm2 :: [And(x, x) := x] {
+    id1c
+    cmpl2c[1](x)
+    dist2c
+    cmpl1[1]
+    id2
+}
+
+theorem idm1c :: [x := Or(x, x)] {
+    id1c
+    cmpl2c[1](x)
+    dist1
+    cmpl1[1]
+    id2
+}
+
+theorem idm2c :: [x := And(x, x)] {
+    id2c
+    cmpl1c[1](x)
+    dist2
+    cmpl2[1]
+    id1
+}
+
+theorem dn :: [Not(Not(x)) := x] {
+    #                            ::  [:= Not(Not(x))]
+    id1c                         ::  [:= Or(Not(Not(x)), F)]
+    cmpl2c[1](x)                 ::  [:= Or(Not(Not(x)), And(x, Not(x)))]
+    dist1                        ::  [:= And(Or(Not(Not(x)), x), Or(Not(Not(x)), Not(x)))]
+    comm1[1]
+    cmpl1[1]                     ::  [:= And(Or(Not(Not(x)), x), T)]
+    comm1[0]
+    cmpl1c[1](x)                 ::  [:= And(Or(x, Not(Not(x))), Or(x, Not(x)))]
+    dist1c                       ::  [:= Or(x, And(Not(Not(x)), Not(x)))]
+    comm2[1]
+    cmpl2[1]                     ::  [:= Or(x, F)]
+    id1
+}
+
+theorem dnc :: [x := Not(Not(x))] {
+    #                            ::  [:= x]
+    id1c                         ::  [:= Or(x, F)]
+    cmpl2c[1](Not(x))
+    comm2[1]                     ::  [:= Or(x, And(Not(Not(x)), Not(x)))]
+    dist1                        ::  [:= And(Or(x, Not(Not(x))), Or(x, Not(x)))]
+    cmpl1[1]
+    comm1[0]                     ::  [:= And(Or(Not(Not(x)), x), T)]
+    cmpl1c[1](Not(x))
+    comm1[1]                     ::  [:= And(Or(Not(Not(x)), x), Or(Not(Not(x)), Not(x)))]
+    dist1c                       ::  [:= Or(Not(Not(x)), And(x, Not(x)))]
+    cmpl2[1]                     ::  [:= Or(Not(Not(x)), F)]
+    id1
+}
