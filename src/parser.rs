@@ -142,10 +142,6 @@ impl<'a> Parser<'a> {
 
         self.sc.expect_token(TokenTy::DoubleColon)?;
 
-        self.sc.expect_token(TokenTy::Lbrace)?;
-        let pat = self.parse_expr()?;
-        self.sc.expect_token(TokenTy::Rbrace)?;
-
         let mut params = Vec::new();
         if self.sc.is_token(TokenTy::Lparen)? && !self.sc.is_token(TokenTy::Rparen)? {
             loop {
@@ -155,11 +151,17 @@ impl<'a> Parser<'a> {
                     break;
                 }
             }
+
+            self.sc.expect_token(TokenTy::DoubleColon)?;
         }
+
+        self.sc.expect_token(TokenTy::Lbrace)?;
+        let pat = self.parse_expr()?;
 
         self.sc.expect_token(TokenTy::ColonEqual)?;
 
         let rep = self.parse_expr()?;
+        self.sc.expect_token(TokenTy::Rbrace)?;
 
         Ok(Rule {
             name,
@@ -228,7 +230,8 @@ impl<'a> Parser<'a> {
             }
         }
 
-        let ret = if self.sc.is_token(TokenTy::Lbrace)? {
+        let ret = if self.sc.is_token(TokenTy::DoubleColon)? {
+            self.sc.expect_token(TokenTy::Lbrace)?;
             self.sc.expect_token(TokenTy::ColonEqual)?;
             let e = self.parse_expr()?;
             self.sc.expect_token(TokenTy::Rbrace)?;

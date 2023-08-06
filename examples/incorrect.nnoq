@@ -3,8 +3,8 @@ type A :: (D) :: B
 type C :: (D) :: D
 
 type id :: B
-theorem id :: [b] := b {}
+theorem id :: [b := b] {}
 
-theorem incorrect :: [A(b)] := A(b) {
+theorem incorrect :: [A(b) := A(b)] {
     id[0]
 }

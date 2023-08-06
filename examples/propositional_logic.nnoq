@@ -6,14 +6,14 @@ type Theorem :: (Prop, Theorem)  :: Theorem
 type Nil :: Theorem
 
 # axioms
-axiom theorem_comm :: [Theorem(p, Theorem(q, r))] := Theorem(q, Theorem(p, r))
-axiom theorem_rem :: [Theorem(p, q)] := q
-axiom modus_ponens :: [Theorem(p, Theorem(Impl(p, q), th))] := Theorem(q, Theorem(p, Theorem(Impl(p, q), th)))
-axiom a1 :: [th] (p, q) := Theorem(Impl(p, Impl(q, p)), th)
-axiom a2 :: [th] (p, q, r) := Theorem(Impl(Impl(p, Impl(q, r)), Impl(Impl(p, q), Impl(p, r))), th)
-axiom a3 :: [th] (p, q) := Theorem(Impl(Impl(Not(p), Not(q)), Impl(q, p)), th)
+axiom theorem_comm :: [Theorem(p, Theorem(q, r)) := Theorem(q, Theorem(p, r))]
+axiom theorem_rem :: [Theorem(p, q) := q]
+axiom modus_ponens :: [Theorem(p, Theorem(Impl(p, q), th)) := Theorem(q, Theorem(p, Theorem(Impl(p, q), th)))]
+axiom a1 :: (p, q) :: [th := Theorem(Impl(p, Impl(q, p)), th)]
+axiom a2 :: (p, q, r) :: [th := Theorem(Impl(Impl(p, Impl(q, r)), Impl(Impl(p, q), Impl(p, r))), th)]
+axiom a3 :: (p, q) :: [th := Theorem(Impl(Impl(Not(p), Not(q)), Impl(q, p)), th)]
 
-theorem p_implies_p :: [th] (p) := Theorem(Impl(p, p), th) {
+theorem p_implies_p :: (p) :: [th := Theorem(Impl(p, p), th)] {
     a2(p, Impl(p, p), p)
     a1(p, Impl(p, p))
     modus_ponens
@@ -25,9 +25,9 @@ theorem p_implies_p :: [th] (p) := Theorem(Impl(p, p), th) {
     theorem_rem[1]
 }
 
-theorem hypothetical_syllogism ::
-        [th] (p, q, r)
-        := Theorem(Impl(Impl(q, r), Impl(Impl(p, q), Impl(p, r))), th)
+theorem hypothetical_syllogism 
+    :: (p, q, r)
+    :: [th := Theorem(Impl(Impl(q, r), Impl(Impl(p, q), Impl(p, r))), th)]
 {
     a1(Impl(Impl(p, Impl(q, r)), Impl(Impl(p, q), Impl(p, r))), Impl(q, r))
     a2(p, q, r)
@@ -47,15 +47,14 @@ theorem hypothetical_syllogism ::
 
 # this is not actually a theorem in propositional logic. it is a meta theorem. 
 # we are able to state this as a theorem only because we are able to "directly" manipulate the theorem set.
-theorem hypothetical_syllogism_meta :: 
-        [Theorem(Impl(q, r), Theorem(Impl(p, q), th))] 
-        := Theorem(Impl(p, r), Theorem(Impl(q, r), Theorem(Impl(p, q), th))) 
+theorem hypothetical_syllogism_meta
+    :: [Theorem(Impl(q, r), Theorem(Impl(p, q), th)) := Theorem(Impl(p, r), Theorem(Impl(q, r), Theorem(Impl(p, q), th)))]
 {
     hypothetical_syllogism(p, q, r)
     theorem_comm
     modus_ponens
     theorem_comm[1]
-    theorem_rem[1]                           [:= Theorem(Impl(Impl(p, q), Impl(p, r)), Theorem(Impl(q, r), Theorem(Impl(p, q), th)))]
+    theorem_rem[1]                        ::   [:= Theorem(Impl(Impl(p, q), Impl(p, r)), Theorem(Impl(q, r), Theorem(Impl(p, q), th)))]
     theorem_comm[1]
     theorem_comm
     modus_ponens
@@ -64,7 +63,7 @@ theorem hypothetical_syllogism_meta ::
     theorem_comm[1]
 }
 
-theorem lemma_2 :: [th] (p, q) := Theorem(Impl(p, Impl(Impl(p, q), q)), th) {
+theorem lemma_2 :: (p, q) :: [th := Theorem(Impl(p, Impl(Impl(p, q), q)), th)] {
     hypothetical_syllogism(p, Impl(Impl(p, q), p), Impl(Impl(p, q), q))
     a2(Impl(p, q), p, q)
     p_implies_p(Impl(p, q))
@@ -80,12 +79,12 @@ theorem lemma_2 :: [th] (p, q) := Theorem(Impl(p, Impl(Impl(p, q), q)), th) {
     theorem_rem[1]
 }
 
-theorem double_neg_1 :: [th] (p) := Theorem(Impl(Not(Not(p)), p), th) {
+theorem double_neg_1 :: (p) :: [th := Theorem(Impl(Not(Not(p)), p), th)] {
     a3(Not(Impl(p, p)), Not(p))
     a3(p, Impl(p, p))
     hypothetical_syllogism_meta
     theorem_rem[1]
-    theorem_rem[1]                           [:= Theorem(Impl(Impl(Not(Not(Impl(p, p))), Not(Not(p))), Impl(Impl(p, p), p)), th)]
+    theorem_rem[1]                        ::   [:= Theorem(Impl(Impl(Not(Not(Impl(p, p))), Not(Not(p))), Impl(Impl(p, p), p)), th)]
     a1(Not(Not(p)), Not(Not(Impl(p, p))))
     theorem_comm
     hypothetical_syllogism_meta
@@ -101,7 +100,7 @@ theorem double_neg_1 :: [th] (p) := Theorem(Impl(Not(Not(p)), p), th) {
     theorem_rem[1]
 }
 
-theorem double_neg_2 :: [th] := Theorem(Impl(p, Not(Not(p)))) {
+theorem double_neg_2 :: (p) :: [th := Theorem(Impl(p, Not(Not(p))), th)] {
     a3(Not(Not(p)), p)
     double_neg_1(Not(p))
     modus_ponens
