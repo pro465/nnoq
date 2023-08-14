@@ -1,3 +1,6 @@
+# boolean algebra as decribed by wikipedia:
+# https://en.wikipedia.org/wiki/Boolean_algebra_(structure)#Axiomatics
+# specifically, the infoboxes titled "Huntington 1904 Boolean algebra axioms" and "Proven properties"
 type T :: B
 type F :: B
 
@@ -87,4 +90,130 @@ theorem dnc :: [x := Not(Not(x))] {
     dist1c                       ::  [:= Or(Not(Not(x)), And(x, Not(x)))]
     cmpl2[1]                     ::  [:= Or(Not(Not(x)), F)]
     id1
+}
+
+theorem or_bind :: [Or(x, T) := T] {
+    id2c
+    comm2
+    cmpl1c[0](x)
+    dist1c                        ::  [:= Or(x, And(Not(x), T))]
+    id2[1]
+    cmpl1
+}
+
+theorem and_bind :: [And(x, F) := F] {
+    id1c
+    comm1
+    cmpl2c[0](x)
+    dist2c                        ::  [:= And(x, Or(Not(x), F))]
+    id1[1]
+    cmpl2
+}
+
+theorem or_abs :: [And(x, Or(x, y)) := x] {
+    id1c[0]
+    dist1c
+    comm2[1]
+    and_bind[1]
+    id1
+}
+
+theorem and_abs :: [Or(x, And(x, y)) := x] {
+    id2c[0]
+    dist2c
+    comm1[1]
+    or_bind[1]
+    id2
+}
+
+theorem or_neg :: [Or(Not(x), Or(x, y)) := T] {
+    id2c
+    cmpl1c[1](x)
+    comm1[1]
+    dist1c                        ::  [:= Or(Not(x), And(Or(x, y), x))]
+    comm2[1]
+    or_abs[1]
+    comm1
+    cmpl1
+}
+
+theorem and_neg :: [And(Not(x), And(x, y)) := F] {
+    id1c
+    cmpl2c[1](x)
+    comm2[1]
+    dist2c                        ::  [:= And(Not(x), Or(And(x, y), x))]
+    comm1[1]
+    and_abs[1]
+    comm2
+    cmpl2
+}
+
+
+theorem dm_l1 :: [Or(Or(x, y), And(Not(x), Not(y))) := T] {
+    dist1                         ::  [:= And(Or(Or(x, y), Not(x)), Or(Or(x, y), Not(y)))]
+    comm1[0]
+    comm1[1]
+    comm1[1, 1]                   ::  [:= And(Or(Not(x), Or(x, y)), Or(Not(y), Or(y, x)))]
+    or_neg[0]
+    or_neg[1]
+    idm2
+}
+
+theorem dm_l2 :: [And(Or(x, y), And(Not(x), Not(y))) := F] {
+    comm2
+    dist2                         ::  [:= Or(And(And(Not(x), Not(y)), x), And(And(Not(x), Not(y)), y))]
+    comm2[0]
+    comm2[1]
+    comm2[1, 1]                   ::  [:= Or(And(x, And(Not(x), Not(y))), And(y, And(Not(y), Not(x))))]
+    dnc[0, 0]
+    dnc[1, 0]
+    and_neg[0]
+    and_neg[1]
+    idm1
+}
+
+theorem de_morgans_law_1 :: [Not(Or(x, y)) := And(Not(x), Not(y))] {
+    id2c[0]
+    cmpl1c[0, 1](And(Not(x), Not(y)))
+    dist2[0]                      ::  [:= Not(Or(And(Or(x, y), And(Not(x), Not(y))), And(Or(x, y), Not(And(Not(x), Not(y))))))]
+    comm2[0, 1]
+    dm_l2[0, 0]                   ::  [:= Not(Or(F, And(Not(And(Not(x), Not(y))), Or(x, y))))]
+    cmpl2c[0, 0](And(Not(x), Not(y)))
+    comm2[0, 0]
+    dist2c[0]                     ::  [:= Not(And(Not(And(Not(x), Not(y))), Or(And(Not(x), Not(y)), Or(x, y))))]
+    comm1[0, 1]
+    dm_l1[0, 1]                   ::  [:= Not(And(Not(And(Not(x), Not(y))), T))]
+    id2[0]
+    dn
+}
+
+theorem de_morgans_law_2 :: [Not(And(x, y)) := Or(Not(x), Not(y))] {
+    dnc[0, 0]
+    dnc[0, 1]
+    id2c[0]
+    cmpl1c[0, 1](Or(Not(x), Not(y)))
+    dist2[0]                       ::  [:= Not(Or(And(And(Not(Not(x)), Not(Not(y))), Or(Not(x), Not(y))), And(And(Not(Not(x)), Not(Not(y))), Not(Or(Not(x), Not(y))))))]
+    comm2[0, 0]
+    comm2[0, 1]
+    dm_l2[0, 0]                    ::  [:= Not(Or(F, And(Not(Or(Not(x), Not(y))), And(Not(Not(x)), Not(Not(y))))))]
+    cmpl2c[0, 0](Or(Not(x), Not(y)))
+    comm2[0, 0]
+    dist2c[0]                      ::  [:= Not(And(Not(Or(Not(x), Not(y))), Or(Or(Not(x), Not(y)), And(Not(Not(x)), Not(Not(y))))))]
+    dm_l1[0, 1]                    ::  [:= Not(And(Not(Or(Not(x), Not(y))), T))]
+    id2[0]
+    dn
+}
+
+theorem de_morgans_law_1_c :: [And(Not(x), Not(y)) := Not(Or(x, y))] {
+    dnc
+    de_morgans_law_2[0]
+    dn[0, 0]
+    dn[0, 1]
+}
+
+theorem de_morgans_law_2_c :: [Or(Not(x), Not(y)) := Not(And(x, y))] {
+    dnc
+    de_morgans_law_1[0]
+    dn[0, 0]
+    dn[0, 1]
 }
