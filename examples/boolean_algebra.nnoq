@@ -216,14 +216,14 @@ theorem de_morgans_law_2 :: [Not(And(x, y)) := Or(Not(x), Not(y))] {
     double_negation
 }
 
-theorem de_morgans_law_1_c :: [And(Not(x), Not(y)) := Not(Or(x, y))] {
+theorem de_morgans_law_1_conv :: [And(Not(x), Not(y)) := Not(Or(x, y))] {
     double_negation_conv
     de_morgans_law_2[0]
     double_negation[0, 0]
     double_negation[0, 1]
 }
 
-theorem de_morgans_law_2_c :: [Or(Not(x), Not(y)) := Not(And(x, y))] {
+theorem de_morgans_law_2_conv :: [Or(Not(x), Not(y)) := Not(And(x, y))] {
     double_negation_conv
     de_morgans_law_1[0]
     double_negation[0, 0]
