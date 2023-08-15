@@ -20,8 +20,8 @@ P and P -> Q := Q
 
 Notes:   
     1. the examples are not valid nnoq syntax. However, they are just an example to give you an idea of what `:=` does.  
-    2. in the first example, we cannot derive the converse (`2 := 1 + 1`). However we can do so in the second one, since it is it's own inverse ([Involution](https://en.wikipedia.org/wiki/Involution_(mathematics))).   
-    3. the converses of the first two examples are valid. However, the third's converse is [not valid](https://github.com/catseye/Eqthy/issues/4). this is an example of why `:=` is not just a restriced `=`. It allows for more finer grained proofs than `=`, while also not giving up the expressivity of `=`.   
+    2. in the first example, we cannot derive the inverse (`2 := 1 + 1`). However we can do so in the second one, since it is it's own inverse ([Involution](https://en.wikipedia.org/wiki/Involution_(mathematics))).   
+    3. the inverses of the first two examples are valid. However, the third's converse is [not valid](https://github.com/catseye/Eqthy/issues/4). this is an example of why `:=` is not just a restriced `=`. It allows for more finer grained proofs than `=`, while also not giving up the expressivity of `=`.   
     
 # Types
 TODO
