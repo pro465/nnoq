@@ -7,6 +7,8 @@ It also has types to ensure the expressions are not nonsensical.
 
 Examples are on the examples directory.
 
+for instructions on installation and how to prove your theorems in nnoq, see [tutorial](./tutorial.md).
+
 # Foundations
 I guess I should define the terms first:
 - small letters denote variable name, capital letters denote terms (exceptions below).
