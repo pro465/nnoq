@@ -41,6 +41,19 @@ you can also omit the parameter part to define a constant, like so:
 type True :: Bool
 ```
 # Axioms
-TODO
+axioms are things that would be "taken for granted". for example, if you were dealing with logic, you would declare things like modus ponens as axioms, and declare things derived from them as theorems.
+In nnoq, you use the `axiom` keyword to define an axiom, like so:
+```
+axiom and_commute :: [And(x, y) := And(y, x)]
+```   
+Note that only variables from the "LHS" of the `:=` are considered defined for the "RHS". those not in the "LHS" need to be explicitly stated in a parameter list, like this:
+```
+axiom or_id :: (x, y) :: [True := Or(And(x, y), Not(And(x, y)))]
+```
+In the above example, since `x` and `y` did not appear in the left expression (`True`), we need to explicitly define them.  
+This won't work:
+```
+axiom or_id :: [True := Or(And(x, y), Not(And(x, y)))]
+```
 # Theorems
 TODO
