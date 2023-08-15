@@ -22,9 +22,24 @@ Notes:
     1. the examples are not valid nnoq syntax. However, they are just an example to give you an idea of what `:=` does.  
     2. in the first example, we cannot derive the inverse (`2 := 1 + 1`). However we can do so in the second one, since it is it's own inverse ([Involution](https://en.wikipedia.org/wiki/Involution_(mathematics))).   
     3. the inverses of the first two examples are valid. However, the third's converse is [not valid](https://github.com/catseye/Eqthy/issues/4). this is an example of why `:=` is not just a restricted `=`. It allows for more finer grained proofs than `=`, while also not giving up the expressivity of `=`.   
-    
+
+# Expressions
+`:=`'s expressions on each side can have variables (like `x`, `a`, etc.), contants (like `True`, `False`, `EmptySet`, etc.), or functions of other subexpresions (like `And(x, y)`, `Or(x, Not(x))`, `Implies(p, Not(Not(p)))`, etc.).  
+note that  variables begin with lower case, while functions and constants begin with upper case.
+constants are handled the same as 0-ary functions, so you can say `True()` instead of `True` and it won't complain.
+
 # Types
-TODO
+every valid expression has a type, whether that is inferred or defined.
+expression's types are defined by using the `type` keyword.  
+for example: 
+```
+type And :: (Bool, Bool) :: Bool
+```
+defines `And` to take two arguments of type `Bool` and return type `Bool`.
+you can also omit the parameter part to define a constant, like so:
+```
+type True :: Bool
+```
 # Axioms
 TODO
 # Theorems
