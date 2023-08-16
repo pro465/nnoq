@@ -45,7 +45,8 @@ axioms are things that would be "taken for granted". for example, if you were de
 In nnoq, you use the `axiom` keyword to define an axiom, like so:
 ```
 axiom and_commute :: [And(x, y) := And(y, x)]
-```   
+```
+In this example, we are saying we take `And(x, y) := And(y, x)` as granted.
 Note that only variables from the "LHS" of the `:=` are considered defined for the "RHS". those not in the "LHS" need to be explicitly stated in a parameter list, like this:
 ```
 axiom or_id :: (x, y) :: [True := Or(And(x, y), Not(And(x, y)))]
@@ -56,4 +57,42 @@ This won't work:
 axiom or_id :: [True := Or(And(x, y), Not(And(x, y)))]
 ```
 # Theorems
-TODO
+Theorems are derived from axioms and other theorems. for example, say we have an axiom or theorem  that says we can derive `2` from `1+1`, and another that says we can drive `1*2` from `2`. we can then say we can also derive `1*2` from `1+1`.  
+Theorems in nnoq have basically the same syntax as axioms, except they are declared with the `theorem` keyword, and they have a block containing the proof. Example:
+```
+type Man :: (Thing) :: Bool
+type Mortal :: (Thing) :: Bool
+type Aristotle :: Thing
+
+axiom men_are_mortal :: [Man(x) :=  Mortal(x)]
+
+axiom aristotle_is_man :: [x :=  Man(Aristotle)]
+
+theorem aristotle_is_mortal :: [x := Mortal(Aristotle)] {
+    aristotle_is_man
+    men_are_mortal
+}
+```
+in this example, the proof demonstrates how to transform `x` into `Mortal(Aristotle)`, thus establising the fact that `x := Mortal(Aristotle)`.   
+you can also assert that the rewritten expression after each transformation matches what you expect, as a form of "checked comment".
+```
+theorem aristotle_is_mortal :: [x := Mortal(Aristotle)] {
+    aristotle_is_man        :: [:= Man(Aristotle)]
+    men_are_mortal          :: [:= Mortal(Aristootle)]
+}
+```
+
+you would also pass expressons as arguments to the calls if they need it. for example, to use the `or_id` axiom defined earlier in proofs:
+```
+... :: [:= True]
+or_id(Not(j), k) :: [:= Or(And(Not(j), k), Not(And(Not(j), k)))]
+```
+By the way, although these examples only use axioms in their proofs, you can also use other theorems defined earlier in the file.
+Note that you can only use those variables in the expressions as arguments which were defined in the "LHS" and the arguments to the current theorms. so you can not use, for example the variable `t` as argument in a proof of this:
+```
+theorem idk :: (a, b, c) :: [F(d) := G(d, a, b, c)]
+```
+(yes you can have parameters for theorems too.)  
+Also note that you can only use axioms/theorems defined earlier to prove later theorems. This exists primarily to avoid recursion, but also keeps the proof linear and simpler for humans to manually check.
+
+TODO explain subexpression rewriting.
