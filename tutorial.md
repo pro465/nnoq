@@ -95,4 +95,78 @@ theorem idk :: (a, b, c) :: [F(d) := G(d, a, b, c)]
 (yes you can have parameters for theorems too.)  
 Also note that you can only use axioms/theorems defined earlier to prove later theorems. This exists primarily to avoid recursion, but also keeps the proof linear and simpler for humans to manually check.
 
-TODO explain subexpression rewriting.
+## subexpression rewriting
+say you know (or have a proof) that `1 + 1 = 2` and `1 + 1 + 1 = 3`. You can then substitute the latter part of `1 + 1 + 1` to obtain a proof of `1 + 2 = 3`. This is known as congruence. basically, if `A=B` then `f(A)=f(B)`.   
+nnoq also has this, in the form of subexpression rewriting. Basically, you specify a list of indices along with the axiom/theorem you are callng, and it goes to the respective subexpression of the current expression, and applies the axiom/theorem to _that_ subexpression.   
+the following pseudo-python-code might help:
+```py
+def get_exp(axiom_or_theorem, expr, list_of_indices):
+    if len(list_of_indices) == 0:
+        return axiom_or_theorem(expr)
+    return get_exp(expr.args[list_of_indices[0]], list_of_indices[1:])
+```
+
+for example, consider the following axiom:
+```
+axiom id :: [F(x) := G(x, x)]
+```
+and the following expression: 
+```
+G(
+   F(F(F(x))),
+   G(
+       F(F(x)),
+       F(F(F(F(F(F(x))))))
+   )
+)
+```
+`id[0]` would apply `id` to the first argument (it's zero-indexed), resulting in:
+```
+G(
+   G(F(F(x)), F(F(x))),
+   G(
+       F(F(x)),
+       F(F(F(F(F(F(x))))))
+   )
+)
+```
+`id[0, 0]` would apply `id` to the first argument of the first argument, resulting in:
+```
+G(
+   F(G(F(x), F(x))),
+   G(
+       F(F(x)),
+       F(F(F(F(F(F(x))))))
+   )
+)
+```
+if we then apply `id[0, 0, 1]` to the last expression, it would become:
+```
+G(
+   F(G(F(x), G(x, x))),
+   G(
+       F(F(x)),
+       F(F(F(F(F(F(x))))))
+   )
+)
+```
+similarly, applying `id[1, 0]` to the original would result in:
+```
+G(
+   F(F(F(x))),
+   G(
+       G(F(x), F(x)),
+       F(F(F(F(F(F(x))))))
+   )
+)
+```
+finally, applying `id[1, 1, 0]` would result in:
+```
+G(
+   F(F(F(x))),
+   G(
+       F(F(x)),
+       F(G(F(F(F(F(x)))), F(F(F(F(x))))))
+   )
+)
+```
