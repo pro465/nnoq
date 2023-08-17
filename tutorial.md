@@ -87,7 +87,7 @@ you would also pass expressions as arguments to the calls if they need it. for e
 ... :: [:= True]
 or_id(Not(j), k) :: [:= Or(And(Not(j), k), Not(And(Not(j), k)))]
 ```
-By the way, although these examples only use axioms in their proofs, you can also use other theorems defined earlier in the file.
+By the way, although these examples only use axioms in their proofs, you can also use other theorems defined earlier in the file.   
 Note that you can only use those variables in the expressions as arguments which were defined in the "LHS" and the arguments to the current theorms. so you can not use, for example the variable `t` as argument in a proof of this:
 ```
 theorem idk :: (a, b, c) :: [F(d) := G(d, a, b, c)]
@@ -99,13 +99,38 @@ Also note that you can only use axioms/theorems defined earlier to prove later t
 Proofs of theorems in nnoq rely primarily on rewriting.  
 
 The idea of rewriting is this: if you have an axiom/theorem that says `A := B`, what that really means is if you had an instance of `A` -- basically, a match for the pattern `A`, with all it's variables substituted with expressions -- then you can transform that expression into `B` (again with its variables substituted with the values they had in `A`).   
-However, if you try to rewrite an expresson that does _not_ match `A`, then you should receive an error.  
 
-For example, say we know `Or(x, x) := x` then we know:   
-    1. `Or(And(x, y), And(x, y)) := And(x, y)`   
-    2. `Or(Not(x), Not(x)) := Not(x)`   
-    etc.   
-However, we do not know if `Or(x, And(x, y)) := x`, or `And(x, x) := x`, because they do not match the pattern of `Or(x, x)`.
+For example, say we know `Or(x, x) := x` and we name it `or_idemp`, then we know:   
+  1. <details>
+     <summary>
+
+     `Or(And(x, y), And(x, y)) := And(x, y)`
+
+     </summary>
+
+     ```
+     theorem or_1 :: [Or(And(x, y), And(x, y)) := And(x, y)] {
+         or_idemp
+     }
+     ```
+     </details>
+  2. <details>
+     <summary>
+
+     `Or(Not(x), Not(x)) := Not(x)`
+
+     </summary>
+
+     ```
+     theorem or_2 :: [Or(Not(x), Not(x)) := Not(x)] {
+         or_idemp
+     }
+     ```
+     </details>   
+
+
+  etc.   
+However, we do not know if `Or(x, And(x, y)) := x`, `And(x, x) := x`, or `Or(And(y, x), And(x, y)) := And(x, y)`, because they do not match the pattern of `Or(x, x)`.
 
 ## subexpression rewriting
 say you know (or have a proof) that `1 + 1 = 2` and `1 + 1 + 1 = 3`. You can then substitute the latter part of `1 + 1 + 1` to obtain a proof of `1 + 2 = 3`. This is known as congruence. basically, if `A=B` then `f(A)=f(B)`.   
