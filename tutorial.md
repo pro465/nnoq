@@ -57,7 +57,7 @@ This won't work:
 axiom or_id :: [True := Or(And(x, y), Not(And(x, y)))]
 ```
 # Theorems
-Theorems are derived from axioms and other theorems. for example, say we have an axiom or theorem  that says we can derive `2` from `1+1`, and another that says we can drive `1*2` from `2`. we can then say we can also derive `1*2` from `1+1`.  
+Theorems are derived from axioms and other theorems. for example, say we have an axiom or theorem that says we can derive `2` from `1+1`, and another that says we can drive `1*2` from `2`. we can then say we can also derive `1*2` from `1+1`.  
 Theorems in nnoq have basically the same syntax as axioms, except they are declared with the `theorem` keyword, and they have a block containing the proof. Example:
 ```
 type Man :: (Thing) :: Bool
@@ -73,7 +73,7 @@ theorem aristotle_is_mortal :: [x := Mortal(Aristotle)] {
     men_are_mortal
 }
 ```
-in this example, the proof demonstrates how to transform `x` into `Mortal(Aristotle)`, thus establising the fact that `x := Mortal(Aristotle)`.   
+in this example, the proof demonstrates how to transform `x` into `Mortal(Aristotle)` (see below), thus establising the fact that `x := Mortal(Aristotle)`.   
 you can also assert that the rewritten expression after each transformation matches what you expect, as a form of "checked comment".
 ```
 theorem aristotle_is_mortal :: [x := Mortal(Aristotle)] {
@@ -94,9 +94,18 @@ theorem idk :: (a, b, c) :: [F(d) := G(d, a, b, c)]
 ```
 (yes you can have parameters for theorems too.)  
 Also note that you can only use axioms/theorems defined earlier to prove later theorems. This exists primarily to avoid recursion, but also keeps the proof linear and simpler for humans to manually check.
+
 ## pattern matching and replacement
-if you have an axiom/theorem that says `A := B`, what that really means is if you had an instance of `A` -- basically, a match for the pattern `A`, with all it's variables substituted with expressions -- then you can transform that expression into `B` (again with its variables substituted with the values they had in `A`).   
-however, if you try to rewrite an expresson that does _not_ match `A`, then you should receive an error.
+Proofs of theorems in nnoq rely primarily on rewriting.  
+
+The idea of rewriting is this: if you have an axiom/theorem that says `A := B`, what that really means is if you had an instance of `A` -- basically, a match for the pattern `A`, with all it's variables substituted with expressions -- then you can transform that expression into `B` (again with its variables substituted with the values they had in `A`).   
+However, if you try to rewrite an expresson that does _not_ match `A`, then you should receive an error.  
+
+For example, say we know `Or(x, x) := x` then we know:   
+    1. `Or(And(x, y), And(x, y)) := And(x, y)`   
+    2. `Or(Not(x), Not(x)) := Not(x)`   
+    etc.   
+However, we do not know if `Or(x, And(x, y)) := x`, or `And(x, x) := x`, because they do not match the pattern of `Or(x, x)`.
 
 ## subexpression rewriting
 say you know (or have a proof) that `1 + 1 = 2` and `1 + 1 + 1 = 3`. You can then substitute the latter part of `1 + 1 + 1` to obtain a proof of `1 + 2 = 3`. This is known as congruence. basically, if `A=B` then `f(A)=f(B)`.   
