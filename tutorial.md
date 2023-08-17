@@ -78,11 +78,11 @@ you can also assert that the rewritten expression after each transformation matc
 ```
 theorem aristotle_is_mortal :: [x := Mortal(Aristotle)] {
     aristotle_is_man        :: [:= Man(Aristotle)]
-    men_are_mortal          :: [:= Mortal(Aristootle)]
+    men_are_mortal          :: [:= Mortal(Aristotle)]
 }
 ```
 
-you would also pass expressons as arguments to the calls if they need it. for example, to use the `or_id` axiom defined earlier in proofs:
+you would also pass expressions as arguments to the calls if they need it. for example, to use the `or_id` axiom defined earlier in proofs:
 ```
 ... :: [:= True]
 or_id(Not(j), k) :: [:= Or(And(Not(j), k), Not(And(Not(j), k)))]
@@ -94,6 +94,9 @@ theorem idk :: (a, b, c) :: [F(d) := G(d, a, b, c)]
 ```
 (yes you can have parameters for theorems too.)  
 Also note that you can only use axioms/theorems defined earlier to prove later theorems. This exists primarily to avoid recursion, but also keeps the proof linear and simpler for humans to manually check.
+## pattern matching and replacement
+if you have an axiom/theorem that says `A := B`, what that really means is if you had an instance of `A` -- basically, a match for the pattern `A`, with all it's variables substituted with expressions -- then you can transform that expression into `B` (again with its variables substituted with the values they had in `A`).   
+however, if you try to rewrite an expresson that does _not_ match `A`, then you should receive an error.
 
 ## subexpression rewriting
 say you know (or have a proof) that `1 + 1 = 2` and `1 + 1 + 1 = 3`. You can then substitute the latter part of `1 + 1 + 1` to obtain a proof of `1 + 2 = 3`. This is known as congruence. basically, if `A=B` then `f(A)=f(B)`.   
