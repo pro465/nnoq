@@ -3,76 +3,76 @@ type Inv :: (G) :: G
 type Mul :: (G, G) :: G
 # group axioms
 axiom idleft :: [Mul(E, a) := a]
-axiom idleft_conv :: [a :=  Mul(E, a)]
+axiom idleft_inv :: [a :=  Mul(E, a)]
 axiom assoc :: [Mul(Mul(a, b), c) :=  Mul(a, Mul(b, c))]
-axiom assoc_conv :: [Mul(a, Mul(b, c)) :=  Mul(Mul(a, b), c)]
+axiom assoc_inv :: [Mul(a, Mul(b, c)) :=  Mul(Mul(a, b), c)]
 axiom invleft :: [Mul(Inv(a), a) := E]
-axiom invleft_conv :: (a) :: [E :=  Mul(Inv(a), a)]
+axiom invleft_inv :: (a) :: [E :=  Mul(Inv(a), a)]
 
 # theorems about groups
 theorem invright :: [Mul(a, Inv(a)) := E] {
-    idleft_conv
-    invleft_conv[0] (Inv(a))
+    idleft_inv
+    invleft_inv[0](Inv(a))
     assoc
-    assoc_conv[1]
+    assoc_inv[1]
     invleft[1, 0]
     idleft[1]
     invleft
 }
 
-theorem invright_conv :: (a) :: [E := Mul(a, Inv(a))] {
-    invleft_conv(Inv(a))
-    idleft_conv[1]
-    invleft_conv[1, 0](a)
+theorem invright_inv :: (a) :: [E := Mul(a, Inv(a))] {
+    invleft_inv(Inv(a))
+    idleft_inv[1]
+    invleft_inv[1, 0](a)
     assoc[1]
-    assoc_conv
+    assoc_inv
     invleft[0]
     idleft
 }
 
 theorem idright :: [Mul(a, E) := a] {
-    invleft_conv[1] (a)
-    assoc_conv
+    invleft_inv[1](a)
+    assoc_inv
     invright[0]
     idleft
 }
 
-theorem idright_conv :: [a := Mul(a, E)] {
-    idleft_conv
-    invright_conv[0] (a)
+theorem idright_inv :: [a := Mul(a, E)] {
+    idleft_inv
+    invright_inv[0](a)
     assoc
     invleft[1]
 }
 
 theorem idcomm :: [Mul(a, E) := Mul(E, a)] {
     idright
-    idleft_conv
+    idleft_inv
 }
 
-theorem idcomm_conv :: [Mul(E, a) := Mul(a, E)] {
+theorem idcomm_inv :: [Mul(E, a) := Mul(a, E)] {
     idleft
-    idright_conv
+    idright_inv
 }
 
 # And, finally...
 theorem socks_and_shoes :: [Inv(Mul(a, b)) := Mul(Inv(b), Inv(a))] {
-    idleft_conv
-    invleft_conv[0] (b)
-    idleft_conv[0, 1]
-    invleft_conv[0, 1, 0] (a)   ::   [:=  Mul(Mul(Inv(b), Mul(Mul(Inv(a), a), b)), Inv(Mul(a, b)))]
+    idleft_inv
+    invleft_inv[0] (b)
+    idleft_inv[0, 1]
+    invleft_inv[0, 1, 0](a)    ::   [:=  Mul(Mul(Inv(b), Mul(Mul(Inv(a), a), b)), Inv(Mul(a, b)))]
     assoc[0, 1]
-    assoc_conv[0]
+    assoc_inv[0]
     assoc
     invright[1]
     idright
 }
 
-theorem socks_and_shoes_conv :: [Mul(Inv(b), Inv(a)) := Inv(Mul(a, b))] {
-    idright_conv
-    invright_conv[1] (Mul(a, b))
-    assoc_conv
+theorem socks_and_shoes_inv :: [Mul(Inv(b), Inv(a)) := Inv(Mul(a, b))] {
+    idright_inv
+    invright_inv[1](Mul(a, b))
+    assoc_inv
     assoc[0]
-    assoc_conv[0, 1]            ::    [:=  Mul(Mul(Inv(b), Mul(Mul(Inv(a), a), b)), Inv(Mul(a, b)))]
+    assoc_inv[0, 1]             ::    [:=  Mul(Mul(Inv(b), Mul(Mul(Inv(a), a), b)), Inv(Mul(a, b)))]
     invleft[0, 1, 0]
     idleft[0, 1]
     invleft[0]

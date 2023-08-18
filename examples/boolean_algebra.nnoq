@@ -11,7 +11,7 @@ type Not :: (B) :: B
 axiom or_identity :: [Or(x, F) := x]
 axiom and_identity :: [And(x, T) := x]
 
-# these two are their own converses, so we need only 16 - 2 = 14 axioms
+# these two are their own inverses, so we need only 16 - 2 = 14 axioms
 axiom or_commute :: [Or(x, y) := Or(y, x)]
 axiom and_commute :: [And(x, y) := And(y, x)]
 
@@ -20,43 +20,43 @@ axiom and_distribute :: [And(x, Or(y, z)) := Or(And(x, y), And(x, z))]
 
 axiom or_complement :: [Or(x, Not(x)) := T]
 axiom and_complement :: [And(x, Not(x)) := F]
-# converses
-axiom or_identity_conv :: [x := Or(x, F)]
-axiom and_identity_conv :: [x := And(x, T)]
+# inverses
+axiom or_identity_inv :: [x := Or(x, F)]
+axiom and_identity_inv :: [x := And(x, T)]
 
-axiom or_distribute_conv :: [And(Or(x, y), Or(x, z)) := Or(x, And(y, z))]
-axiom and_distribute_conv :: [Or(And(x, y), And(x, z)) := And(x, Or(y, z))]
+axiom or_distribute_inv :: [And(Or(x, y), Or(x, z)) := Or(x, And(y, z))]
+axiom and_distribute_inv :: [Or(And(x, y), And(x, z)) := And(x, Or(y, z))]
 
-axiom or_complement_conv :: (x) :: [T := Or(x, Not(x))]
-axiom and_complement_conv :: (x) :: [F := And(x, Not(x))]
+axiom or_complement_inv :: (x) :: [T := Or(x, Not(x))]
+axiom and_complement_inv :: (x) :: [F := And(x, Not(x))]
 
 theorem or_idempotence :: [Or(x, x) := x] {
-    and_identity_conv
-    or_complement_conv[1](x)
-    or_distribute_conv
+    and_identity_inv
+    or_complement_inv[1](x)
+    or_distribute_inv
     and_complement[1]
     or_identity
 }
 
 theorem and_idempotence :: [And(x, x) := x] {
-    or_identity_conv
-    and_complement_conv[1](x)
-    and_distribute_conv
+    or_identity_inv
+    and_complement_inv[1](x)
+    and_distribute_inv
     or_complement[1]
     and_identity
 }
 
-theorem or_idempotence_conv :: [x := Or(x, x)] {
-    or_identity_conv
-    and_complement_conv[1](x)
+theorem or_idempotence_inv :: [x := Or(x, x)] {
+    or_identity_inv
+    and_complement_inv[1](x)
     or_distribute
     or_complement[1]
     and_identity
 }
 
-theorem and_idempotence_conv :: [x := And(x, x)] {
-    and_identity_conv
-    or_complement_conv[1](x)
+theorem and_idempotence_inv :: [x := And(x, x)] {
+    and_identity_inv
+    or_complement_inv[1](x)
     and_distribute
     and_complement[1]
     or_identity
@@ -64,73 +64,73 @@ theorem and_idempotence_conv :: [x := And(x, x)] {
 
 theorem double_negation :: [Not(Not(x)) := x] {
     #                                         ::  [:= Not(Not(x))]
-    or_identity_conv                          ::  [:= Or(Not(Not(x)), F)]
-    and_complement_conv[1](x)                 ::  [:= Or(Not(Not(x)), And(x, Not(x)))]
+    or_identity_inv                           ::  [:= Or(Not(Not(x)), F)]
+    and_complement_inv[1](x)                  ::  [:= Or(Not(Not(x)), And(x, Not(x)))]
     or_distribute                             ::  [:= And(Or(Not(Not(x)), x), Or(Not(Not(x)), Not(x)))]
     or_commute[1]
     or_complement[1]                          ::  [:= And(Or(Not(Not(x)), x), T)]
     or_commute[0]
-    or_complement_conv[1](x)                  ::  [:= And(Or(x, Not(Not(x))), Or(x, Not(x)))]
-    or_distribute_conv                        ::  [:= Or(x, And(Not(Not(x)), Not(x)))]
+    or_complement_inv[1](x)                   ::  [:= And(Or(x, Not(Not(x))), Or(x, Not(x)))]
+    or_distribute_inv                         ::  [:= Or(x, And(Not(Not(x)), Not(x)))]
     and_commute[1]
     and_complement[1]                         ::  [:= Or(x, F)]
     or_identity
 }
 
-theorem double_negation_conv :: [x := Not(Not(x))] {
+theorem double_negation_inv :: [x := Not(Not(x))] {
     #                                         ::  [:= x]
-    or_identity_conv                          ::  [:= Or(x, F)]
-    and_complement_conv[1](Not(x))
+    or_identity_inv                           ::  [:= Or(x, F)]
+    and_complement_inv[1](Not(x))
     and_commute[1]                            ::  [:= Or(x, And(Not(Not(x)), Not(x)))]
     or_distribute                             ::  [:= And(Or(x, Not(Not(x))), Or(x, Not(x)))]
     or_complement[1]
     or_commute[0]                             ::  [:= And(Or(Not(Not(x)), x), T)]
-    or_complement_conv[1](Not(x))
+    or_complement_inv[1](Not(x))
     or_commute[1]                             ::  [:= And(Or(Not(Not(x)), x), Or(Not(Not(x)), Not(x)))]
-    or_distribute_conv                        ::  [:= Or(Not(Not(x)), And(x, Not(x)))]
+    or_distribute_inv                         ::  [:= Or(Not(Not(x)), And(x, Not(x)))]
     and_complement[1]                         ::  [:= Or(Not(Not(x)), F)]
     or_identity
 }
 
 theorem or_boundary :: [Or(x, T) := T] {
-    and_identity_conv
+    and_identity_inv
     and_commute
-    or_complement_conv[0](x)
-    or_distribute_conv                        ::  [:= Or(x, And(Not(x), T))]
+    or_complement_inv[0](x)
+    or_distribute_inv                         ::  [:= Or(x, And(Not(x), T))]
     and_identity[1]
     or_complement
 }
 
 theorem and_boundary :: [And(x, F) := F] {
-    or_identity_conv
+    or_identity_inv
     or_commute
-    and_complement_conv[0](x)
-    and_distribute_conv                       ::  [:= And(x, Or(Not(x), F))]
+    and_complement_inv[0](x)
+    and_distribute_inv                        ::  [:= And(x, Or(Not(x), F))]
     or_identity[1]
     and_complement
 }
 
 theorem or_abs :: [And(x, Or(x, y)) := x] {
-    or_identity_conv[0]
-    or_distribute_conv
+    or_identity_inv[0]
+    or_distribute_inv
     and_commute[1]
     and_boundary[1]
     or_identity
 }
 
 theorem and_abs :: [Or(x, And(x, y)) := x] {
-    and_identity_conv[0]
-    and_distribute_conv
+    and_identity_inv[0]
+    and_distribute_inv
     or_commute[1]
     or_boundary[1]
     and_identity
 }
 
 theorem or_neg :: [Or(Not(x), Or(x, y)) := T] {
-    and_identity_conv
-    or_complement_conv[1](x)
+    and_identity_inv
+    or_complement_inv[1](x)
     or_commute[1]
-    or_distribute_conv                        ::  [:= Or(Not(x), And(Or(x, y), x))]
+    or_distribute_inv                         ::  [:= Or(Not(x), And(Or(x, y), x))]
     and_commute[1]
     or_abs[1]
     or_commute
@@ -138,10 +138,10 @@ theorem or_neg :: [Or(Not(x), Or(x, y)) := T] {
 }
 
 theorem and_neg :: [And(Not(x), And(x, y)) := F] {
-    or_identity_conv
-    and_complement_conv[1](x)
+    or_identity_inv
+    and_complement_inv[1](x)
     and_commute[1]
-    and_distribute_conv                       ::  [:= And(Not(x), Or(And(x, y), x))]
+    and_distribute_inv                        ::  [:= And(Not(x), Or(And(x, y), x))]
     or_commute[1]
     and_abs[1]
     and_commute
@@ -165,25 +165,25 @@ theorem dm_l2 :: [And(Or(x, y), And(Not(x), Not(y))) := F] {
     and_commute[0]
     and_commute[1]
     and_commute[1, 1]                         ::  [:= Or(And(x, And(Not(x), Not(y))), And(y, And(Not(y), Not(x))))]
-    double_negation_conv[0, 0]
-    double_negation_conv[1, 0]
+    double_negation_inv[0, 0]
+    double_negation_inv[1, 0]
     and_neg[0]
     and_neg[1]
     or_idempotence
 }
 
 theorem de_morgans_law_1 :: [Not(Or(x, y)) := And(Not(x), Not(y))] {
-    and_identity_conv[0]
-    or_complement_conv[0, 1](And(Not(x), Not(y)))
+    and_identity_inv[0]
+    or_complement_inv[0, 1](And(Not(x), Not(y)))
     and_distribute[0]                         ::  [:= Not(Or(
                                                             And(Or(x, y), And(Not(x), Not(y))),
                                                             And(Or(x, y), Not(And(Not(x), Not(y))))
                                                         ))]
     and_commute[0, 1]
     dm_l2[0, 0]                               ::  [:= Not(Or(F, And(Not(And(Not(x), Not(y))), Or(x, y))))]
-    and_complement_conv[0, 0](And(Not(x), Not(y)))
+    and_complement_inv[0, 0](And(Not(x), Not(y)))
     and_commute[0, 0]
-    and_distribute_conv[0]                    ::  [:= Not(And(
+    and_distribute_inv[0]                     ::  [:= Not(And(
                                                             Not(And(Not(x), Not(y))),
                                                             Or(And(Not(x), Not(y)), Or(x, y))
                                                         ))]
@@ -194,10 +194,10 @@ theorem de_morgans_law_1 :: [Not(Or(x, y)) := And(Not(x), Not(y))] {
 }
 
 theorem de_morgans_law_2 :: [Not(And(x, y)) := Or(Not(x), Not(y))] {
-    double_negation_conv[0, 0]
-    double_negation_conv[0, 1]
-    and_identity_conv[0]
-    or_complement_conv[0, 1](Or(Not(x), Not(y)))
+    double_negation_inv[0, 0]
+    double_negation_inv[0, 1]
+    and_identity_inv[0]
+    or_complement_inv[0, 1](Or(Not(x), Not(y)))
     and_distribute[0]                         ::  [:= Not(Or(
                                                             And(And(Not(Not(x)), Not(Not(y))), Or(Not(x), Not(y))), 
                                                             And(And(Not(Not(x)), Not(Not(y))), Not(Or(Not(x), Not(y))))
@@ -205,9 +205,9 @@ theorem de_morgans_law_2 :: [Not(And(x, y)) := Or(Not(x), Not(y))] {
     and_commute[0, 0]
     and_commute[0, 1]
     dm_l2[0, 0]                               ::  [:= Not(Or(F, And(Not(Or(Not(x), Not(y))), And(Not(Not(x)), Not(Not(y))))))]
-    and_complement_conv[0, 0](Or(Not(x), Not(y)))
+    and_complement_inv[0, 0](Or(Not(x), Not(y)))
     and_commute[0, 0]
-    and_distribute_conv[0]                    ::  [:= Not(And(
+    and_distribute_inv[0]                     ::  [:= Not(And(
                                                             Not(Or(Not(x), Not(y))), Or(Or(Not(x), Not(y)), 
                                                             And(Not(Not(x)), Not(Not(y))))
                                                         ))]
@@ -216,15 +216,15 @@ theorem de_morgans_law_2 :: [Not(And(x, y)) := Or(Not(x), Not(y))] {
     double_negation
 }
 
-theorem de_morgans_law_1_conv :: [And(Not(x), Not(y)) := Not(Or(x, y))] {
-    double_negation_conv
+theorem de_morgans_law_1_inv :: [And(Not(x), Not(y)) := Not(Or(x, y))] {
+    double_negation_inv
     de_morgans_law_2[0]
     double_negation[0, 0]
     double_negation[0, 1]
 }
 
-theorem de_morgans_law_2_conv :: [Or(Not(x), Not(y)) := Not(And(x, y))] {
-    double_negation_conv
+theorem de_morgans_law_2_inv :: [Or(Not(x), Not(y)) := Not(And(x, y))] {
+    double_negation_inv
     de_morgans_law_1[0]
     double_negation[0, 0]
     double_negation[0, 1]
