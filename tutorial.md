@@ -5,7 +5,11 @@ Then, just type:
 cargo install --git https://github.com/pro465/nnoq
 ```
 to install the latest version of nnoq.
-then, run `nnoq` in your terminal. you should see the usage message. if you pass it a file name, and it is a syntactically valid and well typed nnoq file, and all the theorems follow from the axioms, then it should print `verified`.
+then, run it like so:
+```shell
+nnoq filename.nnoq
+```
+in your terminal. If the file is a syntactically valid and well typed nnoq file, and all the theorems follow from the axioms, then it should print `verified`.
 
 # Preliminaries
 nnoq is based on expression rewriting, much like eqthy and noq. however, unlike them, it is typed, and is based on a single operator, `:=` which is just `=` (equality) without commutavity.
