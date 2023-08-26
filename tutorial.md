@@ -77,7 +77,7 @@ theorem aristotle_is_mortal :: [x := Mortal(Aristotle)] {
     men_are_mortal
 }
 ```
-in this example, the proof demonstrates how to transform `x` into `Mortal(Aristotle)` (see below), thus establising the fact that `x := Mortal(Aristotle)`.   
+in this example, the proof demonstrates how to transform `x` into `Mortal(Aristotle)` (see [below](#pattern-matching-and-replacement)), thus establising the fact that `x := Mortal(Aristotle)`.   
 you can also assert that the rewritten expression after each transformation matches what you expect, as a form of "checked comment".
 ```
 theorem aristotle_is_mortal :: [x := Mortal(Aristotle)] {
