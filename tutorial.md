@@ -102,7 +102,7 @@ Also note that you can only use axioms/theorems defined earlier to prove later t
 ## pattern matching and replacement
 Proofs of theorems in nnoq rely primarily on rewriting.  
 
-The idea of rewriting is this: if you have an axiom/theorem that says `A := B`, what that really means is if you had an instance of `A` -- basically, a match for the pattern `A`, with all it's variables substituted with expressions -- then you can transform that expression into `B` (again with its variables substituted with the values they had in `A`).   
+The idea of rewriting is this: if you have an axiom/theorem that says `A := B`, what that really means is if you had an instance of `A` -- basically, a match for the pattern `A`, with all it's variables substituted with expressions -- then you can transform that expression into `B` (again with its variables substituted with the values they had in `A`) _while preserving some underlying property_. That property might be equality, or it might not. What matters is whether the properties of `:=` (see [here](./foundations.md)) also hold for the underlying property in question.
 
 For example, say we know `Or(x, x) := x` and we name it `or_idemp`, then we know:   
   1. <details>
